@@ -1,1 +1,1 @@
-# My Basic Rock-Paper-Scissors Game
+# My Rock-Paper-Scissors Game

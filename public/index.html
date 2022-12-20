@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock-Paper-Scissors By. BORA</title>
+</head>
+<body>
+<center>
+    <label for="input_username">Player Name: </label>
+    <input type="text" id="input_username">
+    <label for="input_room">Room Number: </label>
+    <input type="number" id="input_room">
+    <br>
+    <br>
+    <button onclick="joinRoom()">Join Room</button>
+
+    <br>
+        <h2 id="room_label">Welcome</h2>
+    <br>
+    <br>
+        <h1 id="match_state">match state</h1>
+    <br>
+    <br>
+    <br>
+
+    <button onClick=''>Ready</button>
+    <br>
+    <br>
+    <button onClick='setLocalDecision("Rock")'>Rock</button>
+    <button onClick='setLocalDecision("Paper")'>Paper</button>
+    <button onClick='setLocalDecision("Scissors")'>Scissors</button>
+    <br>
+    <br>
+
+    <button onClick='submitDecision()'>Submit Decision</button>
+</center>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const room_label = document.getElementById('room_label');
+
+        const socket = io();
+        let playerName = "";
+        let roomID = 0;
+
+        let local_decision = "";
+        function setLocalDecision(val){local_decision = val;console.log("Local Decision: "+val);}
+
+
+        function joinRoom(){
+            let room_id = document.getElementById('input_room').value;
+            roomID = room_id;
+            let player_name = document.getElementById('input_username').value;
+            playerName = player_name;
+            socket.emit('create-player',{room_id,player_name});
+            room_label.innerText = "Joined Room : "+roomID;
+        }
+        function submitDecision(){
+            socket.emit('set-decision',{roomID,playerName,local_decision});
+        }
+
+    </script>
+</body>
+</html>
