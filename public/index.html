@@ -25,7 +25,7 @@
     <br>
     <br>
 
-    <button onClick=''>Ready</button>
+    <button onClick='setReady()'>Ready</button>
     <br>
     <br>
     <button onClick='setLocalDecision("Rock")'>Rock</button>
@@ -43,6 +43,7 @@
         const socket = io();
         let playerName = "";
         let roomID = 0;
+        let player_ready = false;
 
         let local_decision = "";
         function setLocalDecision(val){local_decision = val;console.log("Local Decision: "+val);}
@@ -58,6 +59,10 @@
         }
         function submitDecision(){
             socket.emit('set-decision',{roomID,playerName,local_decision});
+        }
+        function setReady(){
+            player_ready = true;
+            socket.emit('set-ready', {playerName,player_ready});
         }
 
     </script>

@@ -13,10 +13,20 @@ app.get('/', (req, res) => {
 
 let players = [];
 
-function createPlayer(player_id,player_name,player_room_id,player_decision){
-    return ({id:player_id,name:player_name,roomID:player_room_id,decision:player_decision});
+function createPlayer(player_id,player_name,player_room_id,is_ready,player_decision){
+    return ({
+        id:player_id,
+        name:player_name,
+        roomID:player_room_id,
+        is_ready:is_ready,
+        decision:player_decision
+    });
 }
 
+function logRooms(){
+    console.log("Rooms : ");
+    console.table(rooms);
+}
 
 let player1 = createPlayer(1,"Player1",1,"Rock");
 players.push(player1);
@@ -43,6 +53,7 @@ function addPlayerToRoom(player_id,room_id){
                 if(room.id == room_id){
                     room.players.push(player);
                     console.log(player.name + " is Added to room: "+room_id);
+                    logRooms();
                 }
             })
         }
@@ -101,10 +112,9 @@ io.on('connection', (socket) => {
             players.push(new_player);
             console.log(new_player);
             addPlayerToRoom(new_player.id,join.room_id);
-            console.log(rooms);
         }
         else {
-            console.log("ROOM IS FULL")
+            console.log("ROOM IS FULL");
         }
     })
     socket.on('set-decision',decision => {
@@ -122,6 +132,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
+
     });
   });
 
