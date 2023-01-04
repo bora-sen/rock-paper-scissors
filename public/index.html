@@ -18,6 +18,14 @@
 
     <br>
         <h2 id="room_label">Welcome</h2>
+
+    <br>
+    <br>
+        <div id="player_list"></div>
+        <h3>Players in Room</h3>
+        <ul>
+
+        </ul>
     <br>
     <br>
         <h1 id="match_state">match state</h1>
@@ -25,7 +33,8 @@
     <br>
     <br>
 
-    <button onClick='setReady()'>Ready</button>
+    <button onClick='setReady(true)'>Ready</button>
+    <button onClick='setReady(false)'>Not Ready</button>
     <br>
     <br>
     <button onClick='setLocalDecision("Rock")'>Rock</button>
@@ -60,10 +69,29 @@
         function submitDecision(){
             socket.emit('set-decision',{roomID,playerName,local_decision});
         }
-        function setReady(){
-            player_ready = true;
-            socket.emit('set-ready', {playerName,player_ready});
+        function setReady(ready_val){
+            player_ready = ready_val;
+            socket.emit('set-ready', {roomID,playerName,player_ready});
         }
+
+
+        function UpdatePlayerList(player_names) {
+            let ul_el = document.createElement('ul');
+            player_names.forEach(player_name => {
+                let list_el = document.createElement('li');
+                list_el.innerText = player_name;
+                ul_el.appendChild(list_el);
+            })
+            let parent_div = document.getElementById('player_list');
+            parent_div.appendChild(ul_el);
+        }
+
+        socket.on('update-names',(names) => {
+            UpdatePlayerList(names);
+            console.log(names);
+        })
+
+
 
     </script>
 </body>
